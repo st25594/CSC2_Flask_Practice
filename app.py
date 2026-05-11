@@ -16,3 +16,13 @@ def checkout():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    {% if cart%}
+        <ul>
+        {% for item, details in cart %}
+            <li>{{ item }} - Quantity: {{'%.2f' % details['quantity'] }} x ${{ details ['price] }}= ${{ '%.2f' % details['quantity'] * details['price'] }}</li>
+        </ul>
+        {% endfor %}
+        </ul>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}

@@ -10,3 +10,8 @@
 
 </body>
 </html>
+<ul>
+    {%for flower in flowers.items()%}
+    <li>{{flower[0]}} - ${{details ['price'] }} (stock: {{details['stock']}})</li>
+    {%endfor%}
+</ul>
