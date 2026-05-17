@@ -7,7 +7,7 @@ app.secret_key = 'your_secret_key_here'
 
 @app.route('/')
 def home():
-    flowers = load_data()
+    flowers, addons = load_data()
     return render_template('index.html',flowers=flowers)
 
 
@@ -25,8 +25,36 @@ def checkout():
 def load_data():
     with open('data/flowers.json') as file:
         flowers = json.load(file)
-    return flowers
 
+    with open('data/addons.json') as file:
+        addons = json.load(file)
+
+    return flowers, addons
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    flower = request.form['flower'] # Get the selected flower name
+    quantity = int(request.form['quantity']) # convert quantity to a number
+    flowers, addons = load_data() # get flower from file, ignore addon data
+    cart = session.get('cart', {}) # get cart from session or start fresh
+   
+    if flower not in cart:
+       flash ("invalid flower selected")
+       return redirect(url_for('home'))
+    
+    if flower in cart:
+        cart[flower] ['quantity'] += quantity # add to existing quantity
+    else:
+        cart[flower] = {
+            'price': flowers[flower] ['price'],
+            'quantity': quantity
+            
+        }
+    session['cart'] = cart # update session  
+    session.modified = True # force flask to save it
+    flash(f"{quantity} {flower}(s) added to cart.")
+    return redirect(url_for('home'))
+    
+    return render_template('invoice.html')  
 
 if __name__ == '__main__':
     app.run(debug=True)
