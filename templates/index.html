@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>testing successful</h1>
+{% extends "base.html" %}
 
-</body>
-</html>
-<ul>
-{% for flower, details in flowers.items() %}
-    <li>{{ flower }} - ${{ details['price'] }} (stock: {{ details['stock'] }})</li>
-{% endfor %}
-</ul>
+{% block title %}Flower Shop - Home{% endblock %}
 

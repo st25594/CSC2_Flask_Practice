@@ -58,3 +58,24 @@ def add_to_cart():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    @app.route('/remove_from_cart/items', )
+def remove_from_cart(item):
+    cart = session.get('cart', {})
+    if item in cart:
+        del cart[item]
+        session['cart'] = cart
+        flash(f"{item} removed from cart.")
+    else:
+        flash(f"{item} not found in cart.")
+    return redirect(url_for('home'))
+def calculate_total(cart):
+    total = 0
+    for item, details in cart.items():
+        total = sum(item['price'] * item['quantity'] for item in cart.values())
+    return total
+@app.route("/")
+def home():
+    cart = session.get('cart', {})
+    flowers, addons = load_data()
+    total = calculate_total(cart)
+    return render_template("index.html", flowers=flowers,addons=addons, cart=cart, total=total)

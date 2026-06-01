@@ -24,4 +24,15 @@
     <button type="submit">Add to Cart</button>
     </fieldset>
 </form>
-</ul>
+{% if messages = get_flashed_messages() %}
+    {% for message in messages %}
+    <ul class="flashes">
+        {% if message in messages %}
+        <li>{{ message }}</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endwith %}
+    
+
+

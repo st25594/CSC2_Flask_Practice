@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>testing successful</h1>
+
+</body>
+</html>
+<ul>
+{% for flower, details in flowers.items() %}
+    <li>{{ flower }} - ${{ details['price'] }} (stock: {{ details['stock'] }})</li>
+{% endfor %}
+</ul>
+<h2>your cart</h2>
+<ul>
+{% for item, details in cart.items() %}
+    <li>{{ item }}:{{'%.2f' %details['quantity'] }} x $ {{'%.2f' %details['price'] }} = ${{ '%.2f' % (details['quantity'] * details['price']) }}
+        </li> 
+{% endfor %}
+</ul>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %} 
+<h4>Total: ${{ '%.2f' % total }}</h4>
