@@ -1,0 +1,6 @@
+{% if cart %}
+    <h2>Shopping Cart</h2>
+    <ul>
+        {% for item, details in cart.items() %}
+           <li>{{ item }}: {{ '%.2f' % details['quantity'] }} x ${{ '%.2f' % details['price'] }} = ${{ '%.2f' % (details['quantity'] * details['price']) }}</li>
+    </ul>

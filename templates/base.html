@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <html lang="en">
 <head>
     <title>{% block title %}Flower shop{% endblock %}</title>
     </head>
     <body>
         <header>
-            <h1>online flower shop</h1>
+            <h1>Online flower shop</h1>
             <nav>
                 <a href="{{ url_for('home') }}">Home</a>
             </nav>

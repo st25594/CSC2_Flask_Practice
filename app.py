@@ -5,10 +5,12 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
-@app.route('/')
+@app.route("/")
 def home():
+    cart = session.get('cart', {})
     flowers, addons = load_data()
-    return render_template('index.html',flowers=flowers)
+    total = calculate_total(cart)
+    return render_template("index.html", flowers=flowers,addons=addons, cart=cart, total=total)
 
 
 @app.route('/about')
@@ -30,6 +32,7 @@ def load_data():
         addons = json.load(file)
 
     return flowers, addons
+
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     flower = request.form['flower'] # Get the selected flower name
@@ -37,7 +40,7 @@ def add_to_cart():
     flowers, addons = load_data() # get flower from file, ignore addon data
     cart = session.get('cart', {}) # get cart from session or start fresh
    
-    if flower not in cart:
+    if flower not in flowers:
        flash ("invalid flower selected")
        return redirect(url_for('home'))
     
@@ -56,9 +59,8 @@ def add_to_cart():
     
     return render_template('invoice.html')  
 
-if __name__ == '__main__':
-    app.run(debug=True)
-    @app.route('/remove_from_cart/items', )
+
+@app.route('/remove_from_cart/items/<item>', methods=['POST'])
 def remove_from_cart(item):
     cart = session.get('cart', {})
     if item in cart:
@@ -68,14 +70,15 @@ def remove_from_cart(item):
     else:
         flash(f"{item} not found in cart.")
     return redirect(url_for('home'))
+
+
 def calculate_total(cart):
     total = 0
     for item, details in cart.items():
         total = sum(item['price'] * item['quantity'] for item in cart.values())
     return total
-@app.route("/")
-def home():
-    cart = session.get('cart', {})
-    flowers, addons = load_data()
-    total = calculate_total(cart)
-    return render_template("index.html", flowers=flowers,addons=addons, cart=cart, total=total)
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
