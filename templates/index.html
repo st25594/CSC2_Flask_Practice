@@ -18,6 +18,26 @@
     </fieldset>
     </form>
 {% with messages = get_flashed_messages() %}
+<h2>Select Add-ons</h2>
+
+<form action="{{ url_for('select_addon') }}" method="post">
+    <fieldset>
+        <legend>Add-ons</legend>
+
+        {% for addon, details in addons.items() %}
+            <label>
+                <input type="checkbox"
+                       name="addons"
+                       value="{{ addon }}">
+                {{ addon }} - ${{ details['price'] }}
+            </label><br>
+        {% endfor %}
+
+        <button type="submit">Add Add-ons</button>
+    </fieldset>
+</form>
+
+{% with messages = get_flashed_messages() %}
     {% if messages %}
         <ul class="flashes">
         {% for message in messages %}
@@ -26,18 +46,39 @@
         </ul>
     {% endif %}
 {% endwith %}
+<form method="post">
 <h2>Your cart</h2>
 {% if cart %}
     <ul>
     {% for item, details in cart.items() %}
-       <li>{{ item }}: {{ '%.2f' %details['quantity'] }} x ${{ details['price'] }} = ${{ details['quantity'] * details ['price'] }}
-        <a href="{{ url_for('remove_from_cart', item=item) }}">Remove</a></li>
+        <li>
+            {{ item }}:
+            {{ details['quantity'] }} x ${{ details['price'] }}
+            = ${{ "%.2f"|format(details['quantity'] * details['price']) }}
+            <a href="{{ url_for('remove_from_cart', item=item) }}">Remove</a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>Your cart is empty.</p>
 {% endif %}
 
+{% if selected_addons %}
+    <h3>Add-ons</h3>
+    <ul>
+    {% for addon, price in selected_addons.items() %}
+        <li>{{ addon }} - ${{ "%.2f"|format(price) }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+    <p>Your cart is empty.</p>
+{% endif %}
+<h4>Total: ${{ '%.2f' % total }}</h4>
+<button type="submit"
+        formaction="{{ url_for('cancel_order') }}"
+        onclick="return confirm('Are you sure you want to cancel your order?');">
+    Cancel Order
+</button>
+</form>
 </body>
-
 {% endblock %}
