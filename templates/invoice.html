@@ -1,0 +1,20 @@
+<ul>
+            {% for addon, price in selected_addons.items() %}
+                <li>
+                    {{ addon }}:
+                    £{{ "%.2f"|format(price) }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2>
+        Total: £{{ "%.2f"|format(total) }}
+    </h2>
+
+    <p>Thank you for your order, {{ customer_name }}!</p>
+
+    <a href="{{ url_for('home') }}">Back to Shop</a>
+
+</body>
+</html>
